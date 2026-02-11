@@ -859,51 +859,102 @@
      ═══════════════════════════════════════════ */
   #team {
     background: linear-gradient(160deg, var(--bg-dark) 0%, #111520 100%);
+    justify-content: space-between;
+    align-items: stretch;
+  }
+  #team .slide-title {
+    max-width: 980px;
   }
   .team-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
-    margin-top: 48px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px;
+    margin-top: 36px;
+    max-width: none;
+    width: 100%;
+    align-items: stretch;
   }
   .team-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 36px 28px;
+    border-radius: 22px;
+    padding: 44px 34px 38px;
     text-align: center;
+    min-height: 100%;
+    box-shadow: 0 18px 44px rgba(0,0,0,0.24);
     transition: all 0.35s ease;
   }
   .team-card:hover {
     border-color: rgba(245,183,49,0.2);
-    transform: translateY(-4px);
-  }
-  .team-avatar {
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--yellow), var(--yellow-dim));
-    margin: 0 auto 20px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display);
-    font-size: 1.8rem;
-    color: var(--bg-dark);
-    font-weight: 700;
+    transform: translateY(-6px);
   }
   .team-card h4 {
     font-family: var(--font-display);
-    font-size: 1.25rem;
-    margin-bottom: 4px;
+    font-size: 1.55rem;
+    margin-bottom: 8px;
   }
   .team-card .team-school {
     color: var(--yellow);
-    font-size: 0.82rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+    letter-spacing: 0.02em;
   }
   .team-card p {
     color: var(--text-secondary);
-    font-size: 0.88rem;
-    line-height: 1.5;
+    font-size: 1rem;
+    line-height: 1.62;
+    font-weight: 300;
+  }
+  .team-photo {
+    width: 172px;
+    height: 172px;
+    border-radius: 50%;
+    margin: 0 auto 26px;
+    overflow: hidden;
+    background: var(--bg-card-hover);
+    border: 3px solid rgba(245,183,49,0.22);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.35), 0 0 0 6px rgba(245,183,49,0.08);
+  }
+  .team-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .team-photo img.jathan-headshot {
+    object-position: center 5%;
+  }
+  .team-photo .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .team-partnership {
+    margin-top: 48px;
+    padding: 40px 48px;
+    background: var(--yellow-glow);
+    border-left: 4px solid var(--yellow);
+    border-radius: 0 18px 18px 0;
+    max-width: none;
+    width: 100%;
+    box-shadow: 0 20px 48px rgba(0,0,0,0.24);
+  }
+  .team-partnership h4 {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    margin-bottom: 14px;
+  }
+  .team-partnership p {
+    color: var(--text-secondary);
+    font-size: 1.12rem;
+    line-height: 1.72;
     font-weight: 300;
   }
 
@@ -976,6 +1027,15 @@
     #nav-dots { display: none; }
     .tam-ring.outer { max-width: 280px; }
     .tam-labels { max-width: 280px; }
+    .team-grid { gap: 22px; }
+    .team-card { padding: 34px 24px 30px; border-radius: 18px; }
+    .team-photo { width: 142px; height: 142px; margin-bottom: 20px; }
+    .team-card h4 { font-size: 1.38rem; }
+    .team-card .team-school { font-size: 0.88rem; }
+    .team-card p { font-size: 0.94rem; line-height: 1.56; }
+    .team-partnership { margin-top: 28px; padding: 28px 24px; border-radius: 0 14px 14px 0; }
+    .team-partnership h4 { font-size: 1.32rem; margin-bottom: 10px; }
+    .team-partnership p { font-size: 0.98rem; line-height: 1.62; }
   }
 </style>
 </head>
@@ -1008,40 +1068,68 @@
   </div>
   <h1 class="slide-title reveal reveal-delay-1">Lintel</h1>
   <p class="tagline reveal reveal-delay-2">AI-powered risk detection for construction documents</p>
-  <div class="meta reveal reveal-delay-3">
+  <!-- <div class="meta reveal reveal-delay-3">
     <span>Pre-Seed Round</span>
     <span>January 2026</span>
     <span>ConTech / AI</span>
-  </div>
+  </div> -->
   <div class="scroll-hint">
     <span>Scroll</span>
     <div class="arrow"></div>
   </div>
 </section>
 
+<!-- SLIDE 11: TEAM: move up-->
+<section class="slide" id="team">
+  <p class="slide-label reveal">Team</p>
+  <h2 class="slide-title reveal reveal-delay-1">The right team for this problem</h2>
+  <div class="team-grid">
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-photo">
+        <img class="jathan-headshot" src="jathan-pai2.webp" alt="Jathan Pai headshot">
+      </div>
+      <h4>Jathan Pai</h4>
+      <p class="team-school">CTO · Claremont McKenna College</p>
+      <p>400+ hours reviewing Civil Engineering documents during internship. Research at CalTech (Applied Physics) and Vanderbilt Medical School. Led Governor Gray Davis's housing policy research at the Rose Institute.</p>
+    </div>
+    <div class="team-card reveal reveal-delay-3">
+      <div class="team-photo">
+        <img src="ibrahim-headshot-2.jpg" alt="Ibrahim Mohsin headshot">
+      </div>
+      <h4>Ibrahim Mohsin</h4>
+      <p class="team-school">CEO · UNC Chapel Hill</p>
+      <p>Built SMS-based RAG AI connecting 1000s of government resources for elderly caregivers in Western NC. Founded Workly, a gig marketplace reaching 400+ users and $4000+ job volume across two college towns in 3 months. Developed AI customer portal MVP handling 300+ daily support requests for e-commerce business.</p>
+    </div>
+  </div>
+  <div class="team-partnership reveal reveal-delay-4">
+    <h4>5+ years building together</h4>
+    <p>Jathan and Ibrahim have been collaborating since high school. They won the VEX Robotics State Championship together and were a top 5 U.S. team, were debate partners, and research collaborators on a 180+ page economics paper.</p>
+  </div>
+</section>
+
 <!-- SLIDE 2: PROBLEM -->
 <section class="slide" id="problem">
   <p class="slide-label reveal">The Problem</p>
-  <h2 class="slide-title reveal reveal-delay-1">Construction loses <span class="highlight">$31B annually</span> to poor documentation</h2>
-  <p class="slide-subtitle reveal reveal-delay-2">We spoke with 50+ construction and engineering professionals. The same pain points emerged again and again.</p>
+  <h2 class="slide-title reveal reveal-delay-1">Construction loses <span class="highlight">$100B+ annually</span> to poor documentation</h2>
+  <p class="slide-subtitle reveal reveal-delay-2">We spoke with 50+ construction and engineering professionals about the top causes of cost overuns. The same pain points emerged.</p>
   <div class="problem-grid">
     <div class="problem-card reveal reveal-delay-2">
       <div class="icon">💸</div>
-      <h3>Costly Delays & Rework</h3>
-      <p>Issues caught on-site turn into expensive RFIs, causing project delays and budget overruns that cascade across timelines.</p>
+      <h3>Scope Gaps and Ambiguities</h3>
+      <p>Project scopes are often missing critical details and leave specifics to interpretation, causing contractor conflict and rework.</p>
     </div>
     <div class="problem-card reveal reveal-delay-3">
       <div class="icon">📄</div>
-      <h3>Documentation Conflicts</h3>
-      <p>Drawings don't match specs, schedules contradict reality, and compliance gaps slip through undetected until it's too late.</p>
+      <h3>Plan Conflicts</h3>
+      <p>Drawings don't match specs, and conflicts make their way to the site, causing rework and delays.</p>
     </div>
     <div class="problem-card reveal reveal-delay-4">
       <div class="icon">⏳</div>
-      <h3>Manual Review Bottlenecks</h3>
-      <p>Teams can't keep up with the volume and complexity of modern projects — review is slow, inconsistent, and error-prone.</p>
+      <h3>Regulatory Non-Compliance</h3>
+      <p>Regulatory issues are caught during inspections that existed since design, causing delays and potential fines.</p>
     </div>
   </div>
-  <div class="problem-stat reveal reveal-delay-5">
+  <div class="problem-stat reveal reveal-delay-5"> <!-- CHECK THESE STATS-->
     <div class="stat"><div class="stat-number">~800</div><div class="stat-label">RFIs per project</div></div>
     <div class="stat"><div class="stat-number">6,400 hrs</div><div class="stat-label">spent reviewing</div></div>
     <div class="stat"><div class="stat-number">$864K</div><div class="stat-label">RFI processing cost</div></div>
@@ -1086,7 +1174,7 @@
 </section>
 
 <!-- SLIDE 4: WHY NOW -->
-<section class="slide" id="why-now">
+<!-- <section class="slide" id="why-now">
   <p class="slide-label reveal">Why Now</p>
   <h2 class="slide-title reveal reveal-delay-1">A perfect convergence of forces</h2>
   <p class="slide-subtitle reveal reveal-delay-2">Several macro trends are creating an unprecedented window of opportunity for AI-driven construction intelligence.</p>
@@ -1112,7 +1200,7 @@
       <p>Platforms like Procore and Bluebeam manage workflows but lack systematic contradiction detection — the most costly gap in project delivery.</p>
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- SLIDE 5: HOW IT WORKS -->
 <section class="slide" id="how-it-works">
@@ -1204,8 +1292,8 @@
   </div>
 </section>
 
-<!-- SLIDE 8: BUSINESS MODEL -->
-<section class="slide" id="business-model">
+<!-- SLIDE 8: BUSINESS MODEL: FIX AND REPLACE-->
+<!-- <section class="slide" id="business-model">
   <p class="slide-label reveal">Business Model</p>
   <h2 class="slide-title reveal reveal-delay-1">Project-based SaaS, priced to value</h2>
   <p class="slide-subtitle reveal reveal-delay-2">Per-project pricing scaled by project size and document complexity — aligned to value at risk and time saved.</p>
@@ -1244,7 +1332,7 @@
   <div class="model-note reveal reveal-delay-5">
     <strong style="color:var(--yellow)">Pricing note:</strong> Initial pilots convert to paid deployments. Pricing aligns to the value of risks prevented and hours saved per project.
   </div>
-</section>
+</section> -->
 
 <!-- SLIDE 9: TRACTION & GTM -->
 <section class="slide" id="traction">
@@ -1288,16 +1376,16 @@
     <div class="gtm-section reveal reveal-delay-3">
       <h3>Go-to-Market Strategy</h3>
       <div class="gtm-phase">
-        <h4>Land</h4>
-        <p>Pilot on 1–2 active projects with complex document sets. Deliver prioritized issue logs, evidence, and RFI-ready packets.</p>
+        <h4>Demo</h4>
+        <p>Free Pilot on active projects with complex document sets. Deliver prioritized issue logs, evidence, and RFI-ready packets.</p>
       </div>
       <div class="gtm-phase">
-        <h4>Prove</h4>
+        <h4>Prove and Iterate</h4>
         <p>Measure issues found before field impact, verification time saved, and user adoption to validate clear ROI.</p>
       </div>
       <div class="gtm-phase">
         <h4>Expand</h4>
-        <p>Convert pilots to paid deployments and roll out across additional projects, teams, and portfolio accounts.</p>
+        <p>Convert pilots to paid deployments with enterprise customers, roll out across additional projects, teams, and portfolio accounts.</p>
       </div>
     </div>
   </div>
@@ -1332,38 +1420,12 @@
   </div>
 </section>
 
-<!-- SLIDE 11: TEAM -->
-<section class="slide" id="team">
-  <p class="slide-label reveal">Team</p>
-  <h2 class="slide-title reveal reveal-delay-1">The right team for this problem</h2>
-  <div class="team-grid">
-    <div class="team-card reveal reveal-delay-2">
-      <div class="team-avatar">JP</div>
-      <h4>Jathan Pai</h4>
-      <p class="team-school">Claremont McKenna College</p>
-      <p>Extensive civil engineering and AI experience. Deep domain knowledge bridging construction and technology.</p>
-    </div>
-    <div class="team-card reveal reveal-delay-3">
-      <div class="team-avatar">IM</div>
-      <h4>Ibrahim Mohsin</h4>
-      <p class="team-school">UNC Chapel Hill</p>
-      <p>Nationally recognized programmer. Technical lead with deep expertise in AI systems and software architecture.</p>
-    </div>
-    <div class="team-card reveal reveal-delay-4">
-      <div class="team-avatar">BM</div>
-      <h4>Blake Mechels</h4>
-      <p class="team-school">UNC Chapel Hill</p>
-      <p>2x founder — scaled a $35K landscaping company at age 16. Business development and go-to-market execution.</p>
-    </div>
-  </div>
-</section>
-
 <!-- SLIDE 12: THE ASK -->
 <section class="slide" id="ask">
   <p class="slide-label reveal">The Ask</p>
   <h2 class="slide-title reveal reveal-delay-1">Let's build the future of<br><span class="highlight">construction intelligence</span></h2>
   <p class="slide-subtitle reveal reveal-delay-2">We're seeking pre-seed funding and strategic support to bring Lintel to thousands of contractors — helping them build homes, offices, and apartments faster and more affordably.</p>
-  <a class="ask-cta reveal reveal-delay-3" href="mailto:hello@lintel.ai">
+  <a class="ask-cta reveal reveal-delay-3" href="https://trylintel.com">
     Get in Touch
     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5-5 5 5"/></svg>
   </a>
