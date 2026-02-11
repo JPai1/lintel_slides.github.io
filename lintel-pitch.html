@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lintel — Investor Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #0c0e13;
+    --bg-card: #14171e;
+    --bg-card-hover: #1a1e28;
+    --yellow: #f5b731;
+    --yellow-dim: #c4922a;
+    --yellow-glow: rgba(245, 183, 49, 0.12);
+    --text-primary: #f0ece4;
+    --text-secondary: #8a8d96;
+    --text-muted: #5c5f68;
+    --border: rgba(255,255,255,0.06);
+    --slide-frame: rgba(255,255,255,0.08);
+    --slide-frame-soft: rgba(255,255,255,0.04);
+    --slide-frame-active: rgba(245,183,49,0.3);
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-body: 'DM Sans', -apple-system, sans-serif;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  body {
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .slides-wrapper {
+    transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform;
+  }
+
+  /* ── Slide base ── */
+  .slide {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6vh 8vw;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: filter 0.35s ease;
+  }
+
+  /* ── Progress bar ── */
+  #progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--yellow);
+    z-index: 1000;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 12px var(--yellow);
+  }
+
+  /* ── Scroll buttons ── */
+  .scroll-buttons {
+    position: fixed;
+    top: 16px;
+    right: 36px;
+    display: flex;
+    gap: 8px;
+    z-index: 999;
+  }
+  .scroll-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border);
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+  .scroll-btn:hover {
+    background: rgba(245,183,49,0.1);
+    color: var(--yellow);
+    border-color: rgba(245,183,49,0.3);
+  }
+
+  /* ── Slide counter ── */
+  #counter {
+    position: fixed;
+    bottom: 28px;
+    right: 36px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    z-index: 999;
+    transition: color 0.3s;
+  }
+  #counter span { color: var(--yellow); }
+
+  /* ── Nav dots ── */
+  #nav-dots {
+    position: fixed;
+    right: 36px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 999;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 0;
+  }
+  .nav-dot.active {
+    background: var(--yellow);
+    box-shadow: 0 0 8px rgba(245,183,49,0.5);
+    transform: scale(1.3);
+  }
+  .nav-dot:hover { background: var(--yellow-dim); }
+
+  /* ── Typography ── */
+  .slide-label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 20px;
+  }
+
+  .slide-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    max-width: 800px;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(1rem, 1.8vw, 1.25rem);
+    color: var(--text-secondary);
+    line-height: 1.65;
+    max-width: 640px;
+    font-weight: 300;
+  }
+
+  .highlight { color: var(--yellow); }
+  .italic { font-family: var(--font-display); font-style: italic; }
+
+  /* ── Animations ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.12s; }
+  .reveal-delay-2 { transition-delay: 0.24s; }
+  .reveal-delay-3 { transition-delay: 0.36s; }
+  .reveal-delay-4 { transition-delay: 0.48s; }
+  .reveal-delay-5 { transition-delay: 0.60s; }
+
+  /* Noise texture overlay */
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+  .slide::after {
+    content: '';
+    position: absolute;
+    inset: 2.5vh 2.6vw;
+    border-radius: 28px;
+    border: 1px solid var(--slide-frame);
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), transparent 34%, rgba(0,0,0,0.16));
+    box-shadow: inset 0 0 0 1px var(--slide-frame-soft);
+    opacity: 0.72;
+    pointer-events: none;
+    z-index: 0;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+  }
+  .slide.is-active {
+    filter: saturate(1.06);
+  }
+  .slide.is-active::after {
+    border-color: var(--slide-frame-active);
+    box-shadow: inset 0 0 0 1px rgba(245,183,49,0.14), 0 12px 40px rgba(0,0,0,0.26);
+    opacity: 0.95;
+  }
+  .slide > * { position: relative; z-index: 1; }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 1: COVER
+     ═══════════════════════════════════════════ */
+  #cover {
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 20%, rgba(245,183,49,0.06) 0%, transparent 60%);
+  }
+  #cover .logo-mark {
+    width: 80px; height: 80px;
+    margin-bottom: 32px;
+  }
+  #cover .logo-mark svg { width: 100%; height: 100%; }
+  #cover .slide-title {
+    font-size: clamp(3rem, 6.5vw, 5.5rem);
+    margin-bottom: 16px;
+    max-width: none;
+  }
+  #cover .tagline {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+  #cover .meta {
+    display: flex;
+    gap: 32px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    animation: pulse 2s ease infinite;
+  }
+  .scroll-hint .arrow {
+    width: 20px; height: 20px;
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: rotate(45deg);
+  }
+  @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 2: PROBLEM
+     ═══════════════════════════════════════════ */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .problem-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 28px;
+    transition: all 0.35s ease;
+  }
+  .problem-card:hover {
+    background: var(--bg-card-hover);
+    border-color: rgba(245,183,49,0.15);
+    transform: translateY(-4px);
+  }
+  .problem-card .icon {
+    width: 48px; height: 48px;
+    background: var(--yellow-glow);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+  .problem-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    margin-bottom: 12px;
+  }
+  .problem-card p {
+    color: var(--text-secondary);
+    font-size: 0.93rem;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .problem-stat {
+    margin-top: 48px;
+    display: flex;
+    gap: 48px;
+  }
+  .stat { text-align: center; }
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--yellow);
+  }
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 3: SOLUTION
+     ═══════════════════════════════════════════ */
+  #solution {
+    background: linear-gradient(160deg, var(--bg-dark) 0%, #111520 100%);
+  }
+  .solution-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    margin-top: 40px;
+  }
+  .solution-points { display: flex; flex-direction: column; gap: 28px; }
+  .solution-point {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .solution-point .num {
+    width: 36px; height: 36px; min-width: 36px;
+    background: var(--yellow);
+    color: var(--bg-dark);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .solution-point h4 {
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+  }
+  .solution-point p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+  .solution-visual {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .solution-visual::after {
+    content: '';
+    position: absolute;
+    top: -50%; right: -50%;
+    width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(245,183,49,0.06), transparent 60%);
+  }
+  .dashboard-mock {
+    display: flex; flex-direction: column; gap: 16px;
+    position: relative; z-index: 1;
+  }
+  .dash-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .dash-header h5 { font-size: 0.85rem; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .dash-metrics {
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+  }
+  .dash-metric {
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .dash-metric .val {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    color: var(--yellow);
+  }
+  .dash-metric .lab {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+  .dash-issue {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255,255,255,0.025);
+    border-radius: 10px;
+    padding: 12px 16px;
+  }
+  .dash-issue .name {
+    font-size: 0.82rem;
+    color: var(--text-primary);
+  }
+  .dash-issue .sev {
+    font-size: 0.65rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .sev-high { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .sev-med { background: rgba(245,183,49,0.15); color: var(--yellow); }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 4: WHY NOW
+     ═══════════════════════════════════════════ */
+  .why-now-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .why-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 30px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .why-card:hover { border-color: rgba(245,183,49,0.2); }
+  .why-card .trend-num {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--yellow);
+    opacity: 0.15;
+    position: absolute;
+    top: 16px; right: 24px;
+  }
+  .why-card h4 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  .why-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 5: HOW IT WORKS
+     ═══════════════════════════════════════════ */
+  #how-it-works {
+    background: linear-gradient(180deg, var(--bg-dark) 0%, #0f1218 100%);
+  }
+  .steps-track {
+    display: flex;
+    gap: 0;
+    margin-top: 56px;
+    position: relative;
+  }
+  .steps-track::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: 28px;
+    right: 28px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--yellow), var(--yellow-dim), var(--text-muted));
+  }
+  .step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+  .step-dot {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--yellow);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-weight: 700;
+    color: var(--yellow);
+    font-size: 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .step h4 {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    padding: 0 10px;
+  }
+  .step p {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    line-height: 1.55;
+    padding: 0 10px;
+    font-weight: 300;
+  }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 6: PRODUCT
+     ═══════════════════════════════════════════ */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    transition: all 0.35s ease;
+  }
+  .feature-card:hover {
+    border-color: rgba(245,183,49,0.2);
+    transform: translateY(-3px);
+  }
+  .feature-icon {
+    width: 44px; height: 44px; min-width: 44px;
+    background: var(--yellow-glow);
+    border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--yellow);
+    font-size: 20px;
+  }
+  .feature-card h4 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+  }
+  .feature-card p {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 7: MARKET
+     ═══════════════════════════════════════════ */
+  #market {
+    background: linear-gradient(160deg, var(--bg-dark) 0%, #111420 100%);
+  }
+  .market-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 60px;
+    align-items: center;
+    margin-top: 48px;
+  }
+  .tam-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .tam-ring {
+    width: 100%; max-width: 380px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .tam-ring.outer {
+    background: radial-gradient(circle, transparent 42%, rgba(245,183,49,0.04) 42%, rgba(245,183,49,0.04) 100%);
+    border: 1.5px solid rgba(245,183,49,0.12);
+  }
+  .tam-ring.mid {
+    width: 68%; aspect-ratio: 1;
+    background: radial-gradient(circle, transparent 38%, rgba(245,183,49,0.08) 38%, rgba(245,183,49,0.08) 100%);
+    border: 1.5px solid rgba(245,183,49,0.2);
+    position: absolute;
+  }
+  .tam-ring.inner {
+    width: 36%; aspect-ratio: 1;
+    background: rgba(245,183,49,0.12);
+    border: 1.5px solid rgba(245,183,49,0.35);
+    position: absolute;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .tam-ring .ring-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--yellow);
+    font-weight: 600;
+  }
+  .tam-labels {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 380px;
+    margin-top: 20px;
+  }
+  .tam-label-item { text-align: center; }
+  .tam-label-item .val {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--yellow);
+  }
+  .tam-label-item .lab {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .market-details { display: flex; flex-direction: column; gap: 24px; }
+  .market-item {
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .market-item:last-child { border: none; padding-bottom: 0; }
+  .market-item h4 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
+  .market-item p {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 8: BUSINESS MODEL
+     ═══════════════════════════════════════════ */
+  .pricing-tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .tier {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 28px;
+    transition: all 0.35s ease;
+    position: relative;
+  }
+  .tier.featured {
+    border-color: var(--yellow);
+    background: linear-gradient(180deg, rgba(245,183,49,0.06), var(--bg-card) 40%);
+  }
+  .tier.featured::before {
+    content: 'MOST POPULAR';
+    position: absolute;
+    top: -11px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--yellow);
+    color: var(--bg-dark);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 4px 14px;
+    border-radius: 20px;
+  }
+  .tier h4 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+  .tier .tier-desc {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+  .tier-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tier-features li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tier-features li::before {
+    content: '→';
+    color: var(--yellow);
+    font-weight: 700;
+  }
+  .model-note {
+    margin-top: 36px;
+    padding: 20px 24px;
+    background: var(--yellow-glow);
+    border-left: 3px solid var(--yellow);
+    border-radius: 0 12px 12px 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 9: TRACTION & GTM
+     ═══════════════════════════════════════════ */
+  #traction {
+    background: linear-gradient(160deg, var(--bg-dark) 0%, #0f1118 100%);
+  }
+  .traction-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-top: 48px;
+  }
+  .timeline { display: flex; flex-direction: column; position: relative; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 15px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--yellow), var(--text-muted));
+  }
+  .tl-item {
+    display: flex;
+    gap: 24px;
+    padding-bottom: 36px;
+    position: relative;
+  }
+  .tl-dot {
+    width: 32px; height: 32px; min-width: 32px;
+    border-radius: 50%;
+    background: var(--bg-dark);
+    border: 2px solid var(--yellow);
+    position: relative;
+    z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tl-dot.done { background: var(--yellow); }
+  .tl-dot.done::after { content: '✓'; color: var(--bg-dark); font-size: 14px; font-weight: 700; }
+  .tl-content h4 { font-size: 0.95rem; margin-bottom: 4px; }
+  .tl-content .tl-date { font-size: 0.78rem; color: var(--yellow); font-weight: 600; margin-bottom: 6px; }
+  .tl-content p { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.55; font-weight: 300; }
+
+  .gtm-section h3 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    margin-bottom: 28px;
+  }
+  .gtm-phase {
+    margin-bottom: 24px;
+    padding-left: 20px;
+    border-left: 2px solid var(--border);
+  }
+  .gtm-phase h4 {
+    color: var(--yellow);
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .gtm-phase p {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 10: COMPETITION
+     ═══════════════════════════════════════════ */
+  .comp-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 48px;
+  }
+  .comp-col {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 30px;
+  }
+  .comp-col.lintel-col {
+    border-color: var(--yellow);
+    background: linear-gradient(180deg, rgba(245,183,49,0.05), var(--bg-card) 50%);
+  }
+  .comp-col h4 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    margin-bottom: 6px;
+  }
+  .comp-col .comp-sub {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+  .comp-items {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .comp-item {
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .comp-item .comp-icon {
+    color: var(--text-muted);
+    font-size: 16px;
+    margin-top: 2px;
+    min-width: 18px;
+    text-align: center;
+  }
+  .lintel-col .comp-icon { color: var(--yellow); }
+  .comp-item p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 11: TEAM
+     ═══════════════════════════════════════════ */
+  #team {
+    background: linear-gradient(160deg, var(--bg-dark) 0%, #111520 100%);
+  }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 48px;
+  }
+  .team-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 28px;
+    text-align: center;
+    transition: all 0.35s ease;
+  }
+  .team-card:hover {
+    border-color: rgba(245,183,49,0.2);
+    transform: translateY(-4px);
+  }
+  .team-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--yellow), var(--yellow-dim));
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--bg-dark);
+    font-weight: 700;
+  }
+  .team-card h4 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    margin-bottom: 4px;
+  }
+  .team-card .team-school {
+    color: var(--yellow);
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .team-card p {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  /* ═══════════════════════════════════════════
+     SLIDE 12: ASK
+     ═══════════════════════════════════════════ */
+  #ask {
+    background: radial-gradient(ellipse at 50% 60%, rgba(245,183,49,0.08) 0%, transparent 55%), var(--bg-dark);
+    align-items: center;
+    text-align: center;
+  }
+  #ask .slide-title {
+    max-width: none;
+    margin-bottom: 16px;
+  }
+  #ask .slide-subtitle {
+    max-width: 580px;
+    margin: 0 auto 48px;
+  }
+  .ask-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 40px;
+    background: var(--yellow);
+    color: var(--bg-dark);
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 24px rgba(245,183,49,0.25);
+  }
+  .ask-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(245,183,49,0.35);
+  }
+  .ask-details {
+    display: flex;
+    gap: 48px;
+    margin-top: 48px;
+  }
+  .ask-detail { text-align: center; }
+  .ask-detail .val {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .ask-detail .lab {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE
+     ═══════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .slide { padding: 5vh 6vw; }
+    .slide::after { inset: 2vh 3vw; border-radius: 20px; }
+    .problem-grid, .pricing-tiers, .team-grid { grid-template-columns: 1fr; }
+    .features-grid, .solution-layout, .market-layout, .traction-layout, .comp-layout, .why-now-grid { grid-template-columns: 1fr; }
+    .steps-track { flex-direction: column; gap: 24px; }
+    .steps-track::before { display: none; }
+    .problem-stat { flex-direction: column; gap: 24px; }
+    .ask-details { flex-direction: column; gap: 24px; }
+    #nav-dots { display: none; }
+    .tam-ring.outer { max-width: 280px; }
+    .tam-labels { max-width: 280px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Progress bar -->
+<div id="progress"></div>
+
+<!-- Scroll buttons -->
+<div class="scroll-buttons">
+  <button class="scroll-btn" id="scroll-top" aria-label="First slide" title="First slide">⬆</button>
+  <button class="scroll-btn" id="scroll-bottom" aria-label="Last slide" title="Last slide">⬇</button>
+</div>
+
+<!-- Slide counter -->
+<div id="counter"><span>01</span> / 12</div>
+
+<!-- Nav dots -->
+<nav id="nav-dots"></nav>
+
+<div class="slides-wrapper" id="slides-wrapper">
+
+<!-- SLIDE 1: COVER -->
+<section class="slide" id="cover">
+  <div class="logo-mark reveal">
+    <svg viewBox="0 0 80 80" fill="none">
+      <rect x="8" y="8" width="64" height="64" rx="16" stroke="#f5b731" stroke-width="3" fill="none"/>
+      <path d="M24 56V24h12v20h16v12H24z" fill="#f5b731"/>
+    </svg>
+  </div>
+  <h1 class="slide-title reveal reveal-delay-1">Lintel</h1>
+  <p class="tagline reveal reveal-delay-2">AI-powered risk detection for construction documents</p>
+  <div class="meta reveal reveal-delay-3">
+    <span>Pre-Seed Round</span>
+    <span>January 2026</span>
+    <span>ConTech / AI</span>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- SLIDE 2: PROBLEM -->
+<section class="slide" id="problem">
+  <p class="slide-label reveal">The Problem</p>
+  <h2 class="slide-title reveal reveal-delay-1">Construction loses <span class="highlight">$31B annually</span> to poor documentation</h2>
+  <p class="slide-subtitle reveal reveal-delay-2">We spoke with 50+ construction and engineering professionals. The same pain points emerged again and again.</p>
+  <div class="problem-grid">
+    <div class="problem-card reveal reveal-delay-2">
+      <div class="icon">💸</div>
+      <h3>Costly Delays & Rework</h3>
+      <p>Issues caught on-site turn into expensive RFIs, causing project delays and budget overruns that cascade across timelines.</p>
+    </div>
+    <div class="problem-card reveal reveal-delay-3">
+      <div class="icon">📄</div>
+      <h3>Documentation Conflicts</h3>
+      <p>Drawings don't match specs, schedules contradict reality, and compliance gaps slip through undetected until it's too late.</p>
+    </div>
+    <div class="problem-card reveal reveal-delay-4">
+      <div class="icon">⏳</div>
+      <h3>Manual Review Bottlenecks</h3>
+      <p>Teams can't keep up with the volume and complexity of modern projects — review is slow, inconsistent, and error-prone.</p>
+    </div>
+  </div>
+  <div class="problem-stat reveal reveal-delay-5">
+    <div class="stat"><div class="stat-number">~800</div><div class="stat-label">RFIs per project</div></div>
+    <div class="stat"><div class="stat-number">6,400 hrs</div><div class="stat-label">spent reviewing</div></div>
+    <div class="stat"><div class="stat-number">$864K</div><div class="stat-label">RFI processing cost</div></div>
+  </div>
+</section>
+
+<!-- SLIDE 3: SOLUTION -->
+<section class="slide" id="solution">
+  <p class="slide-label reveal">The Solution</p>
+  <h2 class="slide-title reveal reveal-delay-1">Catch risks <span class="italic">before</span> they land on-site</h2>
+  <p class="slide-subtitle reveal reveal-delay-2">Lintel's AI continuously scans your entire project document set, detecting contradictions and compliance risks — with citations for instant verification.</p>
+  <div class="solution-layout">
+    <div class="solution-points">
+      <div class="solution-point reveal reveal-delay-2">
+        <div class="num">1</div>
+        <div><h4>Cross-Document Detection</h4><p>Find contradictions across drawings, specs, and schedules automatically — no manual cross-referencing.</p></div>
+      </div>
+      <div class="solution-point reveal reveal-delay-3">
+        <div class="num">2</div>
+        <div><h4>Evidence-Based Citations</h4><p>Every issue is backed by precise references to source pages and sections for instant verification.</p></div>
+      </div>
+      <div class="solution-point reveal reveal-delay-4">
+        <div class="num">3</div>
+        <div><h4>Workflow-Ready Outputs</h4><p>Generate issue logs and RFI-ready packets with all context attached — export directly to Procore and more.</p></div>
+      </div>
+    </div>
+    <div class="solution-visual reveal reveal-delay-3">
+      <div class="dashboard-mock">
+        <div class="dash-header"><h5>Dashboard</h5><span style="font-size:0.75rem;color:var(--text-muted)">Live</span></div>
+        <div class="dash-metrics">
+          <div class="dash-metric"><div class="val">127</div><div class="lab">Issues</div></div>
+          <div class="dash-metric"><div class="val">43</div><div class="lab">High Sev</div></div>
+          <div class="dash-metric"><div class="val">14</div><div class="lab">Ingested</div></div>
+          <div class="dash-metric"><div class="val">7</div><div class="lab">RFIs</div></div>
+        </div>
+        <div class="dash-issue"><span class="name">Structural beam conflicts with HVAC ductwork</span><span class="sev sev-high">HIGH</span></div>
+        <div class="dash-issue"><span class="name">Missing fire rating spec for corridor walls</span><span class="sev sev-high">HIGH</span></div>
+        <div class="dash-issue"><span class="name">Electrical service capacity insufficient</span><span class="sev sev-med">MED</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: WHY NOW -->
+<section class="slide" id="why-now">
+  <p class="slide-label reveal">Why Now</p>
+  <h2 class="slide-title reveal reveal-delay-1">A perfect convergence of forces</h2>
+  <p class="slide-subtitle reveal reveal-delay-2">Several macro trends are creating an unprecedented window of opportunity for AI-driven construction intelligence.</p>
+  <div class="why-now-grid">
+    <div class="why-card reveal reveal-delay-2">
+      <span class="trend-num">01</span>
+      <h4>LLMs can finally read construction docs</h4>
+      <p>Multimodal AI breakthroughs enable reliable parsing and reasoning across complex technical drawings, specifications, and schedules for the first time.</p>
+    </div>
+    <div class="why-card reveal reveal-delay-3">
+      <span class="trend-num">02</span>
+      <h4>$2.15T in U.S. construction spend</h4>
+      <p>Record-level construction activity means more complex projects, more documentation, and more risk — amplifying the need for automated review.</p>
+    </div>
+    <div class="why-card reveal reveal-delay-4">
+      <span class="trend-num">03</span>
+      <h4>ConTech adoption is accelerating</h4>
+      <p>Construction software TAM is growing from $10.6B to $11.6B in just one year, signaling industry readiness for next-gen workflow tools.</p>
+    </div>
+    <div class="why-card reveal reveal-delay-5">
+      <span class="trend-num">04</span>
+      <h4>Existing tools leave a gap</h4>
+      <p>Platforms like Procore and Bluebeam manage workflows but lack systematic contradiction detection — the most costly gap in project delivery.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: HOW IT WORKS -->
+<section class="slide" id="how-it-works">
+  <p class="slide-label reveal">How It Works</p>
+  <h2 class="slide-title reveal reveal-delay-1">Five steps from documents to decisions</h2>
+  <div class="steps-track">
+    <div class="step reveal reveal-delay-1">
+      <div class="step-dot">01</div>
+      <h4>Connect</h4>
+      <p>Upload or connect your entire project document set from cloud or local storage.</p>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-dot">02</div>
+      <h4>Scan</h4>
+      <p>AI parses drawings, specs, and schedules in real-time for contradictions and compliance risks.</p>
+    </div>
+    <div class="step reveal reveal-delay-3">
+      <div class="step-dot">03</div>
+      <h4>Prioritize</h4>
+      <p>Issues are ranked by severity and confidence to focus team attention on highest-impact risks.</p>
+    </div>
+    <div class="step reveal reveal-delay-4">
+      <div class="step-dot">04</div>
+      <h4>Cite</h4>
+      <p>Every issue includes precise citations to source pages and sections for instant verification.</p>
+    </div>
+    <div class="step reveal reveal-delay-5">
+      <div class="step-dot">05</div>
+      <h4>Act</h4>
+      <p>Generate issue logs and RFI-ready packets with context for seamless workflow integration.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6: PRODUCT -->
+<section class="slide" id="product">
+  <p class="slide-label reveal">Product</p>
+  <h2 class="slide-title reveal reveal-delay-1">Built for how construction teams <span class="italic">actually</span> work</h2>
+  <div class="features-grid">
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon">⚡</div>
+      <div><h4>Automated Issue Detection</h4><p>AI-powered scanning identifies contradictions across drawings, specs, and schedules in real-time — no manual cross-checking.</p></div>
+    </div>
+    <div class="feature-card reveal reveal-delay-3">
+      <div class="feature-icon">📋</div>
+      <div><h4>Streamlined RFI Process</h4><p>Generate and send RFIs directly from detected issues with all context and evidence attached — export to Procore in one click.</p></div>
+    </div>
+    <div class="feature-card reveal reveal-delay-4">
+      <div class="feature-icon">🔍</div>
+      <div><h4>Evidence-Based Insights</h4><p>Every issue comes with pinpointed evidence from source documents, making verification instant and auditable.</p></div>
+    </div>
+    <div class="feature-card reveal reveal-delay-5">
+      <div class="feature-icon">💬</div>
+      <div><h4>AI Document Actions</h4><p>Ask Lintel AI questions across your entire construction document set and get instant, accurate answers with citations.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7: MARKET -->
+<section class="slide" id="market">
+  <p class="slide-label reveal">Market Opportunity</p>
+  <h2 class="slide-title reveal reveal-delay-1">A massive, underserved market</h2>
+  <div class="market-layout">
+    <div class="tam-visual reveal reveal-delay-2">
+      <div class="tam-ring outer">
+        <div class="tam-ring mid"></div>
+        <div class="tam-ring inner"><span class="ring-label">SOM</span></div>
+      </div>
+      <div class="tam-labels">
+        <div class="tam-label-item"><div class="val">$10.6B</div><div class="lab">TAM</div></div>
+        <div class="tam-label-item"><div class="val">$1.25T</div><div class="lab">SAM Spend</div></div>
+        <div class="tam-label-item"><div class="val">ENR 400</div><div class="lab">SOM</div></div>
+      </div>
+    </div>
+    <div class="market-details">
+      <div class="market-item reveal reveal-delay-2">
+        <h4>Total Addressable Market</h4>
+        <p>Construction management software is a $10.6B market in 2025, growing to $11.6B in 2026. U.S. construction spend hit $2.15T in 2024.</p>
+      </div>
+      <div class="market-item reveal reveal-delay-3">
+        <h4>Serviceable Market</h4>
+        <p>U.S. nonresidential teams working on complex projects — where RFI volume and documentation complexity are highest.</p>
+      </div>
+      <div class="market-item reveal reveal-delay-4">
+        <h4>Initial Target</h4>
+        <p>ENR Top 400 contractors and mid-to-large builders already adopting workflow technology. Buyers are VP Precon, Ops, and Project Execs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8: BUSINESS MODEL -->
+<section class="slide" id="business-model">
+  <p class="slide-label reveal">Business Model</p>
+  <h2 class="slide-title reveal reveal-delay-1">Project-based SaaS, priced to value</h2>
+  <p class="slide-subtitle reveal reveal-delay-2">Per-project pricing scaled by project size and document complexity — aligned to value at risk and time saved.</p>
+  <div class="pricing-tiers">
+    <div class="tier reveal reveal-delay-2">
+      <h4>Starter</h4>
+      <p class="tier-desc">For teams evaluating AI-driven document review on a single active project.</p>
+      <ul class="tier-features">
+        <li>1 project per month</li>
+        <li>Core issue detection</li>
+        <li>Evidence citations</li>
+        <li>Issue log export</li>
+      </ul>
+    </div>
+    <div class="tier featured reveal reveal-delay-3">
+      <h4>Pro</h4>
+      <p class="tier-desc">For construction teams running multiple projects with complex document sets.</p>
+      <ul class="tier-features">
+        <li>Multiple projects</li>
+        <li>RFI packet automation</li>
+        <li>Advanced evidence tooling</li>
+        <li>Priority support</li>
+      </ul>
+    </div>
+    <div class="tier reveal reveal-delay-4">
+      <h4>Enterprise</h4>
+      <p class="tier-desc">For organizations rolling out across their entire project portfolio.</p>
+      <ul class="tier-features">
+        <li>Portfolio-wide rollout</li>
+        <li>Admin controls & SSO</li>
+        <li>Custom integrations</li>
+        <li>Dedicated success team</li>
+      </ul>
+    </div>
+  </div>
+  <div class="model-note reveal reveal-delay-5">
+    <strong style="color:var(--yellow)">Pricing note:</strong> Initial pilots convert to paid deployments. Pricing aligns to the value of risks prevented and hours saved per project.
+  </div>
+</section>
+
+<!-- SLIDE 9: TRACTION & GTM -->
+<section class="slide" id="traction">
+  <p class="slide-label reveal">Traction & Go-to-Market</p>
+  <h2 class="slide-title reveal reveal-delay-1">Discovery done. Product built. <span class="highlight">Ready to deploy.</span></h2>
+  <div class="traction-layout">
+    <div class="timeline">
+      <div class="tl-item reveal reveal-delay-1">
+        <div class="tl-dot done"></div>
+        <div class="tl-content">
+          <div class="tl-date">Q1 2026 — Complete</div>
+          <h4>Customer Discovery</h4>
+          <p>Engaged 50+ construction professionals to identify where contradictions arise and who owns resolution.</p>
+        </div>
+      </div>
+      <div class="tl-item reveal reveal-delay-2">
+        <div class="tl-dot done"></div>
+        <div class="tl-content">
+          <div class="tl-date">Q1 2026 — Complete</div>
+          <h4>Prototype Development</h4>
+          <p>Built MVP with issue detection, evidence citations, and RFI packet generation capabilities.</p>
+        </div>
+      </div>
+      <div class="tl-item reveal reveal-delay-3">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-date">Q2 2026</div>
+          <h4>Design Partner Pilots</h4>
+          <p>Planning pilots on active projects to validate workflows and drive adoption metrics.</p>
+        </div>
+      </div>
+      <div class="tl-item reveal reveal-delay-4">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-date">Q3 2026</div>
+          <h4>Paid Deployment</h4>
+          <p>Convert pilot projects to paid contracts and begin multi-project expansion.</p>
+        </div>
+      </div>
+    </div>
+    <div class="gtm-section reveal reveal-delay-3">
+      <h3>Go-to-Market Strategy</h3>
+      <div class="gtm-phase">
+        <h4>Land</h4>
+        <p>Pilot on 1–2 active projects with complex document sets. Deliver prioritized issue logs, evidence, and RFI-ready packets.</p>
+      </div>
+      <div class="gtm-phase">
+        <h4>Prove</h4>
+        <p>Measure issues found before field impact, verification time saved, and user adoption to validate clear ROI.</p>
+      </div>
+      <div class="gtm-phase">
+        <h4>Expand</h4>
+        <p>Convert pilots to paid deployments and roll out across additional projects, teams, and portfolio accounts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10: COMPETITION -->
+<section class="slide" id="competition">
+  <p class="slide-label reveal">Competitive Landscape</p>
+  <h2 class="slide-title reveal reveal-delay-1">Why Lintel wins</h2>
+  <p class="slide-subtitle reveal reveal-delay-2">Existing tools manage construction workflows — but none systematically detect the contradictions that cause the most expensive failures.</p>
+  <div class="comp-layout">
+    <div class="comp-col reveal reveal-delay-3">
+      <h4>Existing Solutions</h4>
+      <p class="comp-sub">Procore · Bluebeam · PlanGrid · BuilderTrend</p>
+      <div class="comp-items">
+        <div class="comp-item"><span class="comp-icon">✕</span><p>Manage workflows but lack systematic contradiction detection</p></div>
+        <div class="comp-item"><span class="comp-icon">✕</span><p>Manual review is slow, inconsistent, and doesn't scale</p></div>
+        <div class="comp-item"><span class="comp-icon">✕</span><p>Generic AI tools miss construction context and reliable sourcing</p></div>
+        <div class="comp-item"><span class="comp-icon">✕</span><p>No cross-document analysis or automated evidence trails</p></div>
+      </div>
+    </div>
+    <div class="comp-col lintel-col reveal reveal-delay-4">
+      <h4>Lintel</h4>
+      <p class="comp-sub">Purpose-built for contradiction detection</p>
+      <div class="comp-items">
+        <div class="comp-item"><span class="comp-icon">→</span><p>Cross-document contradiction and scope gap detection</p></div>
+        <div class="comp-item"><span class="comp-icon">→</span><p>Evidence-based citations with source page references</p></div>
+        <div class="comp-item"><span class="comp-icon">→</span><p>RFI-ready packets and issue logs for instant action</p></div>
+        <div class="comp-item"><span class="comp-icon">→</span><p>Auditable, actionable insights tailored to construction teams</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 11: TEAM -->
+<section class="slide" id="team">
+  <p class="slide-label reveal">Team</p>
+  <h2 class="slide-title reveal reveal-delay-1">The right team for this problem</h2>
+  <div class="team-grid">
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-avatar">JP</div>
+      <h4>Jathan Pai</h4>
+      <p class="team-school">Claremont McKenna College</p>
+      <p>Extensive civil engineering and AI experience. Deep domain knowledge bridging construction and technology.</p>
+    </div>
+    <div class="team-card reveal reveal-delay-3">
+      <div class="team-avatar">IM</div>
+      <h4>Ibrahim Mohsin</h4>
+      <p class="team-school">UNC Chapel Hill</p>
+      <p>Nationally recognized programmer. Technical lead with deep expertise in AI systems and software architecture.</p>
+    </div>
+    <div class="team-card reveal reveal-delay-4">
+      <div class="team-avatar">BM</div>
+      <h4>Blake Mechels</h4>
+      <p class="team-school">UNC Chapel Hill</p>
+      <p>2x founder — scaled a $35K landscaping company at age 16. Business development and go-to-market execution.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 12: THE ASK -->
+<section class="slide" id="ask">
+  <p class="slide-label reveal">The Ask</p>
+  <h2 class="slide-title reveal reveal-delay-1">Let's build the future of<br><span class="highlight">construction intelligence</span></h2>
+  <p class="slide-subtitle reveal reveal-delay-2">We're seeking pre-seed funding and strategic support to bring Lintel to thousands of contractors — helping them build homes, offices, and apartments faster and more affordably.</p>
+  <a class="ask-cta reveal reveal-delay-3" href="mailto:hello@lintel.ai">
+    Get in Touch
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5-5 5 5"/></svg>
+  </a>
+  <div class="ask-details reveal reveal-delay-4">
+    <div class="ask-detail"><div class="val">Pre-Seed</div><div class="lab">Round</div></div>
+    <div class="ask-detail"><div class="val">Q2 2026</div><div class="lab">Pilots Begin</div></div>
+    <div class="ask-detail"><div class="val">$10.6B</div><div class="lab">Market TAM</div></div>
+  </div>
+</section>
+
+</div><!-- .slides-wrapper -->
+
+<script>
+(function() {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const wrapper = document.getElementById('slides-wrapper');
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('counter');
+  const navDotsContainer = document.getElementById('nav-dots');
+  const total = slides.length;
+  if (!total) return;
+
+  let currentSlide = 0;
+  let isTransitioning = false;
+  let wheelDeltaBuffer = 0;
+  let wheelResetTimer = null;
+  let touchStartY = null;
+  let touchStartTime = 0;
+
+  const lockDurationMs = 650;
+  const wheelTrigger = 28;
+  const touchTrigger = 38;
+
+  const clampIndex = (idx) => Math.max(0, Math.min(total - 1, idx));
+
+  function updateUi() {
+    const num = String(currentSlide + 1).padStart(2, '0');
+    counter.innerHTML = '<span>' + num + '</span> / ' + total;
+    progress.style.width = ((currentSlide + 1) / total * 100) + '%';
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+    slides.forEach((slide, i) => slide.classList.toggle('is-active', i === currentSlide));
+  }
+
+  function goToSlide(index) {
+    currentSlide = clampIndex(index);
+    wrapper.style.transform = 'translateY(-' + (currentSlide * 100) + 'vh)';
+    updateUi();
+    triggerReveals();
+  }
+
+  function triggerReveals() {
+    const target = slides[currentSlide];
+    if (!target) return;
+    target.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  }
+
+  function queueUnlock() {
+    window.setTimeout(() => { isTransitioning = false; }, lockDurationMs);
+  }
+
+  function stepSlide(direction) {
+    if (isTransitioning) return;
+    const target = clampIndex(currentSlide + direction);
+    if (target === currentSlide) return;
+    isTransitioning = true;
+    goToSlide(target);
+    queueUnlock();
+  }
+
+  // Create nav dots
+  const dots = [];
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    dot.addEventListener('click', () => {
+      if (i === currentSlide) return;
+      isTransitioning = true;
+      goToSlide(i);
+      queueUnlock();
+    });
+    dots.push(dot);
+    navDotsContainer.appendChild(dot);
+  });
+
+  // Scroll buttons
+  document.getElementById('scroll-top').addEventListener('click', () => {
+    if (currentSlide === 0) return;
+    isTransitioning = true;
+    goToSlide(0);
+    queueUnlock();
+  });
+
+  document.getElementById('scroll-bottom').addEventListener('click', () => {
+    if (currentSlide === total - 1) return;
+    isTransitioning = true;
+    goToSlide(total - 1);
+    queueUnlock();
+  });
+
+  // Make wheel gestures "sticky": a small intent moves exactly one slide.
+  window.addEventListener('wheel', (e) => {
+    if (e.ctrlKey) return;
+    e.preventDefault();
+    if (isTransitioning) return;
+
+    wheelDeltaBuffer += e.deltaY;
+    window.clearTimeout(wheelResetTimer);
+    wheelResetTimer = window.setTimeout(() => {
+      wheelDeltaBuffer = 0;
+    }, 140);
+
+    if (Math.abs(wheelDeltaBuffer) < wheelTrigger) return;
+    const direction = wheelDeltaBuffer > 0 ? 1 : -1;
+    wheelDeltaBuffer = 0;
+    stepSlide(direction);
+  }, { passive: false });
+
+  // Swipe support
+  window.addEventListener('touchstart', (e) => {
+    if (!e.touches.length) return;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+  }, { passive: false });
+
+  window.addEventListener('touchend', (e) => {
+    if (touchStartY === null || isTransitioning || !e.changedTouches.length) {
+      touchStartY = null;
+      return;
+    }
+
+    const deltaY = touchStartY - e.changedTouches[0].clientY;
+    const elapsed = Date.now() - touchStartTime;
+    touchStartY = null;
+
+    if (elapsed > 800 || Math.abs(deltaY) < touchTrigger) return;
+    stepSlide(deltaY > 0 ? 1 : -1);
+  }, { passive: true });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+      e.preventDefault();
+      stepSlide(1);
+    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault();
+      stepSlide(-1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      isTransitioning = true;
+      goToSlide(0);
+      queueUnlock();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      isTransitioning = true;
+      goToSlide(total - 1);
+      queueUnlock();
+    }
+  });
+
+  updateUi();
+  triggerReveals();
+})();
+</script>
+</body>
+</html>
