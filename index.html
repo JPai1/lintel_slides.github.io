@@ -220,7 +220,28 @@
     box-shadow: inset 0 0 0 1px rgba(245,183,49,0.14), 0 12px 40px rgba(0,0,0,0.26);
     opacity: 0.95;
   }
-  .slide > * { position: relative; z-index: 1; }
+  .slide > .slide-deck-logo {
+    position: absolute;
+    top: 56px;
+    right: 56px;
+    width: 56px;
+    height: 56px;
+    border: 1px solid rgba(245,183,49,0.28);
+    border-radius: 12px;
+    background: rgba(12,14,19,0.74);
+    box-shadow: 0 0 20px rgba(245,183,49,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .slide > .slide-deck-logo svg {
+    width: 32px;
+    height: 32px;
+    display: block;
+  }
+  .slide > *:not(.slide-deck-logo) { position: relative; z-index: 1; }
 
   /* ═══════════════════════════════════════════
      SLIDE 1: COVER
@@ -958,6 +979,37 @@
     font-weight: 300;
   }
 
+  /* Auto-fit states applied only when team content overflows the slide height */
+  #team.fit-1 .team-grid { gap: 30px; margin-top: 30px; }
+  #team.fit-1 .team-card { padding: 36px 28px 32px; }
+  #team.fit-1 .team-card h4 { font-size: 1.42rem; }
+  #team.fit-1 .team-card .team-school { font-size: 0.9rem; margin-bottom: 12px; }
+  #team.fit-1 .team-card p { font-size: 0.93rem; line-height: 1.52; }
+  #team.fit-1 .team-photo { width: 150px; height: 150px; margin-bottom: 20px; }
+  #team.fit-1 .team-partnership { margin-top: 32px; padding: 30px 34px; }
+  #team.fit-1 .team-partnership h4 { font-size: 1.44rem; margin-bottom: 11px; }
+  #team.fit-1 .team-partnership p { font-size: 1rem; line-height: 1.58; }
+
+  #team.fit-2 .team-grid { gap: 24px; margin-top: 24px; }
+  #team.fit-2 .team-card { padding: 30px 22px 26px; border-radius: 18px; }
+  #team.fit-2 .team-card h4 { font-size: 1.28rem; margin-bottom: 6px; }
+  #team.fit-2 .team-card .team-school { font-size: 0.84rem; margin-bottom: 10px; }
+  #team.fit-2 .team-card p { font-size: 0.86rem; line-height: 1.46; }
+  #team.fit-2 .team-photo { width: 128px; height: 128px; margin-bottom: 16px; }
+  #team.fit-2 .team-partnership { margin-top: 24px; padding: 24px 24px; border-radius: 0 14px 14px 0; }
+  #team.fit-2 .team-partnership h4 { font-size: 1.22rem; margin-bottom: 8px; }
+  #team.fit-2 .team-partnership p { font-size: 0.9rem; line-height: 1.5; }
+
+  #team.fit-3 .team-grid { gap: 18px; margin-top: 18px; }
+  #team.fit-3 .team-card { padding: 24px 18px 20px; border-radius: 16px; }
+  #team.fit-3 .team-card h4 { font-size: 1.16rem; }
+  #team.fit-3 .team-card .team-school { font-size: 0.78rem; margin-bottom: 8px; }
+  #team.fit-3 .team-card p { font-size: 0.8rem; line-height: 1.4; }
+  #team.fit-3 .team-photo { width: 104px; height: 104px; margin-bottom: 12px; border-width: 2px; box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 0 3px rgba(245,183,49,0.06); }
+  #team.fit-3 .team-partnership { margin-top: 18px; padding: 18px 18px; border-radius: 0 12px 12px 0; border-left-width: 3px; }
+  #team.fit-3 .team-partnership h4 { font-size: 1.05rem; margin-bottom: 6px; }
+  #team.fit-3 .team-partnership p { font-size: 0.8rem; line-height: 1.42; }
+
   /* ═══════════════════════════════════════════
      SLIDE 12: ASK
      ═══════════════════════════════════════════ */
@@ -1036,6 +1088,14 @@
     .team-partnership { margin-top: 28px; padding: 28px 24px; border-radius: 0 14px 14px 0; }
     .team-partnership h4 { font-size: 1.32rem; margin-bottom: 10px; }
     .team-partnership p { font-size: 0.98rem; line-height: 1.62; }
+    .slide > .slide-deck-logo {
+      top: 52px;
+      right: 52px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+    }
+    .slide > .slide-deck-logo svg { width: 24px; height: 24px; }
   }
 </style>
 </head>
@@ -1045,10 +1105,10 @@
 <div id="progress"></div>
 
 <!-- Scroll buttons -->
-<div class="scroll-buttons">
-  <button class="scroll-btn" id="scroll-top" aria-label="First slide" title="First slide">⬆</button>
-  <button class="scroll-btn" id="scroll-bottom" aria-label="Last slide" title="Last slide">⬇</button>
-</div>
+  <div class="scroll-buttons">
+    <button class="scroll-btn" id="scroll-top" aria-label="First slide" title="First slide">⬆</button>
+    <button class="scroll-btn" id="scroll-bottom" aria-label="Last slide" title="Last slide">⬇</button>
+  </div>
 
 <!-- Slide counter -->
 <div id="counter"><span>01</span> / 12</div>
@@ -1445,6 +1505,7 @@
   const progress = document.getElementById('progress');
   const counter = document.getElementById('counter');
   const navDotsContainer = document.getElementById('nav-dots');
+  const teamSlide = document.getElementById('team');
   const total = slides.length;
   if (!total) return;
 
@@ -1460,6 +1521,19 @@
   const touchTrigger = 38;
 
   const clampIndex = (idx) => Math.max(0, Math.min(total - 1, idx));
+  const deckLogoSvg = '<svg viewBox="0 0 80 80" fill="none"><rect x="8" y="8" width="64" height="64" rx="16" stroke="#f5b731" stroke-width="3"/><path d="M24 56V24h12v20h16v12H24z" fill="#f5b731"/></svg>';
+
+  function attachSlideLogos() {
+    slides.forEach((slide) => {
+      if (slide.id === 'cover') return;
+      if (slide.querySelector('.slide-deck-logo')) return;
+      const logo = document.createElement('div');
+      logo.className = 'slide-deck-logo';
+      logo.setAttribute('aria-hidden', 'true');
+      logo.innerHTML = deckLogoSvg;
+      slide.appendChild(logo);
+    });
+  }
 
   function updateUi() {
     const num = String(currentSlide + 1).padStart(2, '0');
@@ -1484,6 +1558,17 @@
 
   function queueUnlock() {
     window.setTimeout(() => { isTransitioning = false; }, lockDurationMs);
+  }
+
+  function fitTeamSlide() {
+    if (!teamSlide) return;
+    const fitClasses = ['fit-1', 'fit-2', 'fit-3'];
+    teamSlide.classList.remove(...fitClasses);
+
+    for (const fitClass of fitClasses) {
+      if (teamSlide.scrollHeight <= teamSlide.clientHeight + 1) break;
+      teamSlide.classList.add(fitClass);
+    }
   }
 
   function stepSlide(direction) {
@@ -1590,6 +1675,19 @@
     }
   });
 
+  window.addEventListener('resize', fitTeamSlide);
+  if (teamSlide) {
+    teamSlide.querySelectorAll('img').forEach((img) => {
+      if (img.complete) return;
+      img.addEventListener('load', fitTeamSlide, { once: true });
+    });
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(fitTeamSlide).catch(() => {});
+  }
+
+  attachSlideLogos();
+  fitTeamSlide();
   updateUi();
   triggerReveals();
 })();
