@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lintel — Pitch</title>
+<title>Lintel — Investor Pitch</title>
 <link rel="icon" href="favicon.ico" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1069,7 +1069,22 @@
      RESPONSIVE
      ═══════════════════════════════════════════ */
   @media (max-width: 900px) {
-    .slide { padding: 5vh 6vw; }
+    html, body {
+      height: auto;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .slides-wrapper {
+      transform: none !important;
+      transition: none;
+      will-change: auto;
+    }
+    .slide {
+      min-height: 100dvh;
+      height: auto;
+      overflow: visible;
+      padding: 5vh 6vw;
+    }
     .slide::after { inset: 2vh 3vw; border-radius: 20px; }
     .problem-grid, .pricing-tiers, .team-grid { grid-template-columns: 1fr; }
     .features-grid, .solution-layout, .market-layout, .traction-layout, .comp-layout, .why-now-grid { grid-template-columns: 1fr; }
@@ -1077,6 +1092,7 @@
     .steps-track::before { display: none; }
     .problem-stat { flex-direction: column; gap: 24px; }
     .ask-details { flex-direction: column; gap: 24px; }
+    .scroll-buttons { display: none; }
     #nav-dots { display: none; }
     .tam-ring.outer { max-width: 280px; }
     .tam-labels { max-width: 280px; }
@@ -1516,6 +1532,7 @@
   let wheelResetTimer = null;
   let touchStartY = null;
   let touchStartTime = 0;
+  const isMobileLayout = window.matchMedia('(max-width: 900px)').matches;
 
   const lockDurationMs = 650;
   const wheelTrigger = 28;
@@ -1572,6 +1589,55 @@
     }
   }
 
+  function initMobileFlowMode() {
+    let syncRaf = null;
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+    if (teamSlide) teamSlide.classList.remove('fit-1', 'fit-2', 'fit-3');
+    if (wrapper) wrapper.style.transform = 'none';
+
+    function syncSlideFromScroll() {
+      syncRaf = null;
+      const viewportCenter = window.innerHeight / 2;
+      let nearestIndex = currentSlide;
+      let nearestDistance = Number.POSITIVE_INFINITY;
+
+      slides.forEach((slide, i) => {
+        const rect = slide.getBoundingClientRect();
+        let distance = 0;
+        if (rect.top > viewportCenter) {
+          distance = rect.top - viewportCenter;
+        } else if (rect.bottom < viewportCenter) {
+          distance = viewportCenter - rect.bottom;
+        }
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearestIndex = i;
+        }
+      });
+
+      if (nearestIndex !== currentSlide) {
+        currentSlide = nearestIndex;
+        updateUi();
+      }
+    }
+
+    function requestScrollSync() {
+      if (syncRaf) return;
+      syncRaf = window.requestAnimationFrame(syncSlideFromScroll);
+    }
+
+    window.addEventListener('scroll', requestScrollSync, { passive: true });
+    window.addEventListener('resize', requestScrollSync);
+    requestScrollSync();
+    updateUi();
+  }
+
   function stepSlide(direction) {
     if (isTransitioning) return;
     const target = clampIndex(currentSlide + direction);
@@ -1596,6 +1662,13 @@
     dots.push(dot);
     navDotsContainer.appendChild(dot);
   });
+
+  attachSlideLogos();
+
+  if (isMobileLayout) {
+    initMobileFlowMode();
+    return;
+  }
 
   // Scroll buttons
   document.getElementById('scroll-top').addEventListener('click', () => {
@@ -1687,7 +1760,6 @@
     document.fonts.ready.then(fitTeamSlide).catch(() => {});
   }
 
-  attachSlideLogos();
   fitTeamSlide();
   updateUi();
   triggerReveals();
