@@ -307,12 +307,13 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     margin-top: 48px;
+    align-items: start;
   }
   .problem-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 36px 28px;
+    padding: 32px 26px 28px;
     transition: all 0.35s ease;
   }
   .problem-card:hover {
@@ -900,9 +901,8 @@
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 22px;
-    padding: 44px 34px 38px;
+    padding: 48px 34px 42px;
     text-align: center;
-    min-height: 100%;
     box-shadow: 0 18px 44px rgba(0,0,0,0.24);
     transition: all 0.35s ease;
   }
@@ -1163,19 +1163,19 @@
   <div class="team-grid">
     <div class="team-card reveal reveal-delay-2">
       <div class="team-photo">
-        <img class="jathan-headshot" src="jathan-pai2.webp" alt="Jathan Pai headshot">
-      </div>
-      <h4>Jathan Pai</h4>
-      <p class="team-school">CTO · Claremont McKenna College</p>
-      <p>400+ hours reviewing Civil Engineering documents during internship. Research at CalTech (Applied Physics) and Vanderbilt Medical School. Led Governor Gray Davis's housing policy research at the Rose Institute.</p>
-    </div>
-    <div class="team-card reveal reveal-delay-3">
-      <div class="team-photo">
         <img src="ibrahim-headshot-2.jpg" alt="Ibrahim Mohsin headshot">
       </div>
       <h4>Ibrahim Mohsin</h4>
       <p class="team-school">CEO · UNC Chapel Hill</p>
       <p>Built SMS-based RAG AI connecting 1000s of government resources for elderly caregivers in Western NC. Founded Workly, a gig marketplace reaching 400+ users and $4000+ job volume across two college towns in 3 months. Developed AI customer portal MVP handling 300+ daily support requests for e-commerce business.</p>
+    </div>
+    <div class="team-card reveal reveal-delay-3">
+      <div class="team-photo">
+        <img class="jathan-headshot" src="jathan-pai2.webp" alt="Jathan Pai headshot">
+      </div>
+      <h4>Jathan Pai</h4>
+      <p class="team-school">CTO · Claremont McKenna College</p>
+      <p>400+ hours reviewing Civil Engineering documents during internship. Research at CalTech (Applied Physics) and Vanderbilt Medical School. Led Governor Gray Davis's housing policy research at the Rose Institute. Brings deep technical rigor and domain context to Lintel's contradiction detection and administrative agent workflows.</p>
     </div>
   </div>
   <div class="team-partnership reveal reveal-delay-4">
@@ -1188,22 +1188,22 @@
 <section class="slide" id="problem">
   <p class="slide-label reveal">The Problem</p>
   <h2 class="slide-title reveal reveal-delay-1">Construction loses <span class="highlight">$100B+ annually</span> to poor documentation</h2>
-  <p class="slide-subtitle reveal reveal-delay-2">We spoke with 50+ construction and engineering professionals about the top causes of cost overuns. The same pain points emerged.</p>
+  <p class="slide-subtitle reveal reveal-delay-2">We spoke with 50+ construction and engineering professionals about the top causes of cost overruns. The same pain points emerged.</p>
   <div class="problem-grid">
     <div class="problem-card reveal reveal-delay-2">
       <div class="icon">💸</div>
       <h3>Scope Gaps and Ambiguities</h3>
-      <p>Project scopes are often missing critical details and leave specifics to interpretation, causing contractor conflict and rework.</p>
+      <p>Project scopes are often missing key details and leave trade responsibilities open to interpretation. Teams lose time resolving preventable scope disputes, change orders, and rework.</p>
     </div>
     <div class="problem-card reveal reveal-delay-3">
       <div class="icon">📄</div>
       <h3>Plan Conflicts</h3>
-      <p>Drawings don't match specs, and conflicts make their way to the site, causing rework and delays.</p>
+      <p>Drawings, specs, and schedules drift out of sync as revisions stack up. Those conflicts reach the field, triggering RFIs, coordination churn, and costly schedule slips.</p>
     </div>
     <div class="problem-card reveal reveal-delay-4">
       <div class="icon">⏳</div>
       <h3>Regulatory Non-Compliance</h3>
-      <p>Regulatory issues are caught during inspections that existed since design, causing delays and potential fines.</p>
+      <p>Code and permitting issues often sit undetected from design through preconstruction. When they surface at review or inspection, teams absorb delays, redesign cycles, and potential fines.</p>
     </div>
   </div>
   <div class="problem-stat reveal reveal-delay-5"> <!-- CHECK THESE STATS-->
@@ -1217,7 +1217,7 @@
 <section class="slide" id="solution">
   <p class="slide-label reveal">The Solution</p>
   <h2 class="slide-title reveal reveal-delay-1">Catch risks <span class="italic">before</span> they land on-site</h2>
-  <p class="slide-subtitle reveal reveal-delay-2">Lintel's AI continuously scans your entire project document set, detecting contradictions and compliance risks — with citations for instant verification.</p>
+  <p class="slide-subtitle reveal reveal-delay-2">Lintel's AI continuously scans your entire project document set, detecting contradictions and compliance risks — with citations for instant verification. Administrative agents speed up submittal drafting, compliance reports, RFI management, and addendum tracking, dramatically cutting administrative time and costs.</p>
   <div class="solution-layout">
     <div class="solution-points">
       <div class="solution-point reveal reveal-delay-2">
@@ -1230,7 +1230,7 @@
       </div>
       <div class="solution-point reveal reveal-delay-4">
         <div class="num">3</div>
-        <div><h4>Workflow-Ready Outputs</h4><p>Generate issue logs and RFI-ready packets with all context attached — export directly to Procore and more.</p></div>
+        <div><h4>Workflow-Ready Outputs</h4><p>Administrative agents speed up submittal and compliance report drafting, RFI management, and addendum tracking — all with deep understanding of your project's documents. Export directly to Procore and more.</p></div>
       </div>
     </div>
     <div class="solution-visual reveal reveal-delay-3">
@@ -1323,7 +1323,7 @@
     </div>
     <div class="feature-card reveal reveal-delay-3">
       <div class="feature-icon">📋</div>
-      <div><h4>Streamlined RFI Process</h4><p>Generate and send RFIs directly from detected issues with all context and evidence attached — export to Procore in one click.</p></div>
+      <div><h4>Administrative Automation</h4><p>Administrative agents handle RFI management, submittal drafting, compliance reports, and addendum tracking. With deep understanding of your project documents, they dramatically reduce administrative time and costs.</p></div>
     </div>
     <div class="feature-card reveal reveal-delay-4">
       <div class="feature-icon">🔍</div>
@@ -1331,7 +1331,7 @@
     </div>
     <div class="feature-card reveal reveal-delay-5">
       <div class="feature-icon">💬</div>
-      <div><h4>AI Document Actions</h4><p>Ask Lintel AI questions across your entire construction document set and get instant, accurate answers with citations.</p></div>
+      <div><h4>AI Document Intelligence</h4><p>Ask questions across your entire construction document set and get instant answers with citations. Agents understand your project context to deliver accurate, actionable insights.</p></div>
     </div>
   </div>
 </section>
@@ -1472,7 +1472,7 @@
 <section class="slide" id="competition">
   <p class="slide-label reveal">Competitive Landscape</p>
   <h2 class="slide-title reveal reveal-delay-1">Why Lintel wins</h2>
-  <p class="slide-subtitle reveal reveal-delay-2">Existing tools manage construction workflows — but none systematically detect the contradictions that cause the most expensive failures.</p>
+  <p class="slide-subtitle reveal reveal-delay-2">Existing tools manage workflows, but they still rely on manual admin effort for RFIs, submittals, and compliance reporting. Lintel combines contradiction detection with administrative agents that materially reduce both cycle time and processing cost.</p>
   <div class="comp-layout">
     <div class="comp-col reveal reveal-delay-3">
       <h4>Existing Solutions</h4>
@@ -1480,8 +1480,8 @@
       <div class="comp-items">
         <div class="comp-item"><span class="comp-icon">✕</span><p>Manage workflows but lack systematic contradiction detection</p></div>
         <div class="comp-item"><span class="comp-icon">✕</span><p>Manual review is slow, inconsistent, and doesn't scale</p></div>
-        <div class="comp-item"><span class="comp-icon">✕</span><p>Generic AI tools miss construction context and reliable sourcing</p></div>
-        <div class="comp-item"><span class="comp-icon">✕</span><p>No cross-document analysis or automated evidence trails</p></div>
+        <div class="comp-item"><span class="comp-icon">✕</span><p>Admin teams still draft RFIs, submittals, and compliance reports largely by hand</p></div>
+        <div class="comp-item"><span class="comp-icon">✕</span><p>No agent-driven workflow that consistently lowers admin hours and RFI processing cost</p></div>
       </div>
     </div>
     <div class="comp-col lintel-col reveal reveal-delay-4">
@@ -1490,8 +1490,8 @@
       <div class="comp-items">
         <div class="comp-item"><span class="comp-icon">→</span><p>Cross-document contradiction and scope gap detection</p></div>
         <div class="comp-item"><span class="comp-icon">→</span><p>Evidence-based citations with source page references</p></div>
-        <div class="comp-item"><span class="comp-icon">→</span><p>RFI-ready packets and issue logs for instant action</p></div>
-        <div class="comp-item"><span class="comp-icon">→</span><p>Auditable, actionable insights tailored to construction teams</p></div>
+        <div class="comp-item"><span class="comp-icon">→</span><p>Administrative agents automate RFI management, submittal drafting, compliance reports, and addendum tracking</p></div>
+        <div class="comp-item"><span class="comp-icon">→</span><p>Faster admin cycles and lower processing cost with auditable, construction-specific outputs</p></div>
       </div>
     </div>
   </div>
